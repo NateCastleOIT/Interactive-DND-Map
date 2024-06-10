@@ -1,6 +1,7 @@
 export function initializeCanvas(canvas) {
     console.log('Initializing canvas...');
     const ctx = canvas.getContext('2d');
+    
     const img = new Image();
     // Default image url
     img.src = 'https://dl6pgk4f88hky.cloudfront.net/2021/06/untitled_design_21_.png';
@@ -21,15 +22,46 @@ export function initializeCanvas(canvas) {
         ctx.translate(originX + img.width * scale / 2, originY + img.height * scale / 2);
         ctx.rotate(rotateAngle);
         ctx.scale(scale, scale);
-        ctx.drawImage(img, -img.width / 2, -img.height / 2); // Removed unnecessary offset
+        ctx.drawImage(img, -img.width / 2, -img.height / 2);
         ctx.restore();
     }
+
+    document.getElementById('uploadFile').addEventListener('change', (event) => {
+        const file = event.target.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+
+            // Add an event listener that runs when the file has been read
+            reader.onload = (e) => {
+                // Add an event listener that runs when the image has fully loaded
+                img.onload = () => {
+                    console.log('Image loaded successfully.');
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+
+                    startX = 0;
+                    startY = 0;
+                    scale = 1;
+                    originX = 0;
+                    originY = 0;
+
+                    drawImage();
+                    console.log("Image drawn on canvas.");
+                };
+                img.src = e.target.result; // Set the image source to the uploaded image
+            };
+            // Read the uploaded file as a data URL
+            reader.readAsDataURL(file);
+        }
+    });
 
     // Add an event listener that runs when the image has fully loaded
     img.onload = () => {
         console.log('Image loaded successfully.');
         canvas.width = img.width;
         canvas.height = img.height;
+
         drawImage();
         console.log("Image drawn on canvas.");
     };
@@ -48,7 +80,7 @@ export function initializeCanvas(canvas) {
     });
 
     // Add an event listener for panning
-    canvas.addEventListener('mousedown', (event) => {
+    canvas.addEventListener('mousedown', (event) => { 
         if (event.button === 0 && !isRotating)
             {
                 isPanning = true;
@@ -60,6 +92,7 @@ export function initializeCanvas(canvas) {
     // Check if the mouse moves while panning
     canvas.addEventListener('mousemove', (event) => {
         if (isPanning) {
+            console.log('ClientX:', event.clientX, 'ClientY:', event.clientY, 'StartX:', startX, 'StartY:', startY, 'OriginX:', originX, 'OriginY:', originY);
             originX = event.clientX - startX;
             originY = event.clientY - startY;
 

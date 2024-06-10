@@ -20,6 +20,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <h1>DND Interactive Map Viewer</h1>
+        <input type="file" id="uploadFile" accept="image/*"/> 
       </header>
       <main>
         <canvas id="mapCanvas" tabIndex="0" ref={canvasRef}></canvas>
