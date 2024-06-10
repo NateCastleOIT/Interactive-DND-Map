@@ -1,18 +1,20 @@
-import React, { useEffect, useRef} from 'react';
+// src/components/App.js
+import React, { useEffect, useRef } from 'react';
 import '../styles/App.css';
 import { initializeCanvas } from '../utils/canvasUtils';
 
 function App() {
-
   const canvasRef = useRef(null);
 
-  // Using the useEffect hook to run code after the component mounts
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (canvas){
+    if (canvas) {
+      console.log('Canvas element found:', canvas);
       initializeCanvas(canvas);
+    } else {
+      console.error('Canvas element not found');
     }
-  }, []); // empty dependency array ensures that the effect runs only once
+  }, []);
 
   return (
     <div className="App">
@@ -20,7 +22,7 @@ function App() {
         <h1>DND Interactive Map Viewer</h1>
       </header>
       <main>
-        <canvas id="mapCanvas" ref={canvasRef}></canvas>
+        <canvas id="mapCanvas" tabIndex="0" ref={canvasRef}></canvas>
       </main>
       <footer>
         <p>&copy; 2024 DND Map Viewer</p>
