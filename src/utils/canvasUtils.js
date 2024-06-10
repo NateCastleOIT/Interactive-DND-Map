@@ -93,8 +93,8 @@ export function initializeCanvas(canvas) {
     canvas.addEventListener('mousemove', (event) => {
         if (isPanning) {
             console.log('ClientX:', event.clientX, 'ClientY:', event.clientY, 'StartX:', startX, 'StartY:', startY, 'OriginX:', originX, 'OriginY:', originY);
-            originX = event.clientX - startX;
-            originY = event.clientY - startY;
+            originX = (event.clientX - startX) * (img.width / canvas.width);
+            originY = (event.clientY - startY) * (img.height / canvas.height);
 
             drawImage();
         }
